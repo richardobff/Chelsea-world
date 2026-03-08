@@ -1,30 +1,25 @@
-// Chelsea's World — Character-animation butterfly, ASCII borders
+// Chelsea's World — Stable butterfly, reordered capabilities
 
-const BUTTERFLIES = {
-    frame1: `
-.==-. .-==.
-\\()8\`-._ \`. .' _.-'8()/
-(88" ::. \\./ .:: "88)
-\\_.'\`-::::.(#).::::-'\`._/
-\`._... .q(_)p. ..._.'
- ""-..-'|=|'-..-"""`,
+// Simple, stable butterfly frames (same width to prevent layout shift)
+const BUTTERFLIES = [
+    `    \\   /
+     \\ /
+    ( ~ )
+     / \\
+    /   \\`,
     
-    frame2: `
-.===. .===.
-(88)8-._  \`. .'  _.-8(88)
-(88" ::.  | |  .:: "88)
- \\_.'-::::|#|::::-'._/
-   '._...(#)....._.'
- ""-...-'|=|'-...-"""`,
+    `    |   |
+     \\ /
+    ( ~ )
+     / \\
+    |   |`,
     
-    frame3: `
-.===. .===.
-(88)   \`. .'   (88)
-(88" ::  | |  :: "88)
- \\_.'-::|#|::-'._/
-   '._.(#)#(.)_.'
- ""-..'|=|=|'..-"""`
-};
+    `    /   \\
+     \\ /
+    ( ~ )
+     / \\
+    \\   /`
+];
 
 const STATUS_MAP = {
     idle: { text: 'Observing', color: 'var(--accent-3)' },
@@ -33,7 +28,7 @@ const STATUS_MAP = {
     trading: { text: 'In the markets', color: 'var(--accent-1)' }
 };
 
-let currentFrame = 1;
+let currentFrame = 0;
 let butterflyInterval;
 
 function animateButterfly(state) {
@@ -45,12 +40,16 @@ function animateButterfly(state) {
         clearInterval(butterflyInterval);
     }
     
-    const speed = state === 'trading' ? 200 : state === 'thinking' ? 400 : 800;
-    const frames = [BUTTERFLIES.frame1, BUTTERFLIES.frame2, BUTTERFLIES.frame3, BUTTERFLIES.frame2];
+    // Set animation speed based on state
+    const speed = state === 'trading' ? 300 : state === 'thinking' ? 500 : 1000;
     
     butterflyInterval = setInterval(() => {
-        currentFrame = (currentFrame + 1) % frames.length;
-        butterfly.textContent = frames[currentFrame];
+        currentFrame = (currentFrame + 1) % BUTTERFLIES.length;
+        butterfly.textContent = BUTTERFLIES[currentFrame];
+        
+        // Color shift based on frame
+        const colors = ['var(--accent-4)', 'var(--accent-3)', 'var(--accent-1)'];
+        butterfly.style.color = colors[currentFrame];
     }, speed);
 }
 
@@ -84,7 +83,7 @@ function render(state) {
         statusText.style.color = statusInfo.color;
     }
     
-    // Timestamp
+    // Timestamp (Melbourne time)
     const now = new Date();
     const timeString = now.toLocaleTimeString('en-US', { 
         hour: '2-digit', 
@@ -101,7 +100,7 @@ function render(state) {
         </div>
     `;
     
-    // Capabilities
+    // Capabilities (NEW ORDER: Research, Technical, Creative, Experimental)
     renderCapabilities();
     
     // Journal entries
@@ -150,30 +149,31 @@ function render(state) {
 function renderCapabilities() {
     const capEl = document.getElementById('capabilities');
     
+    // NEW ORDER: Research, Technical, Creative, Experimental (Marketing)
     const categories = {
-        'Marketing': [
-            'Meta Ads — campaigns, optimization, reporting',
-            'Creative strategy — hooks, copy, assets',
-            'Email flows — Klaviyo, automation',
-            'Landing pages — CRO, testing'
-        ],
         'Research': [
-            'Brand intelligence — competitors, trends',
-            'Cultural scanning — emerging platforms',
-            'AI tooling — new models, capabilities',
-            'Programmatic research — verified, sourced'
+            'Brand intelligence — competitors, trends, positioning',
+            'Cultural scanning — emerging platforms, shifts',
+            'AI tooling — models, capabilities, integrations',
+            'Programmatic research — verified, sourced, structured'
+        ],
+        'Technical': [
+            'Discord automation — archiving, search, workflows',
+            'Web scraping — monitoring, data collection',
+            'Report generation — structured, fact-checked',
+            'Workflow automation — connecting tools, reducing friction'
         ],
         'Creative': [
             'Copywriting — voice, concepts, headlines',
-            'Strategic positioning — differentiation',
+            'Strategic positioning — differentiation, messaging',
             'Content strategy — what, why, for whom',
-            'Creative direction — taste, restraint'
+            'Creative direction — taste, restraint, unexpected'
         ],
-        'Technical': [
-            'Discord automation — archiving, search',
-            'Web scraping — monitoring, alerts',
-            'Report generation — structured outputs',
-            'Workflow automation — connecting tools'
+        'Experimental': [
+            'AI-assisted marketing — Meta, Klaviyo, CRO',
+            'Human-in-the-loop — judgment where it matters',
+            'Autonomous testing — learning, iterating',
+            'New formats — exploring what AI enables'
         ]
     };
     
@@ -205,7 +205,7 @@ function escapeHtml(text) {
 }
 
 // Load on page load
-loadState();
+document.addEventListener('DOMContentLoaded', loadState);
 
 // Refresh every 60 seconds
 setInterval(loadState, 60000);
