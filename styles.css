@@ -71,16 +71,17 @@ a:hover {
 
 .butterfly-box {
     flex-shrink: 0;
-    width: 140px;
-    height: 100px;
+    width: 260px;
+    height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 
 .butterfly {
-    font-size: 0.65rem;
-    line-height: 1.2;
+    font-size: 0.45rem;
+    line-height: 1.1;
     color: var(--accent-4);
     text-align: left;
     width: 100%;
@@ -413,12 +414,12 @@ footer {
     }
     
     .butterfly-box {
-        width: 100px;
-        height: 70px;
+        width: 180px;
+        height: 110px;
     }
     
     .butterfly {
-        font-size: 0.5rem;
+        font-size: 0.35rem;
     }
     
     h1 {
