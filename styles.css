@@ -166,6 +166,7 @@ h1 {
     font-size: 0.75rem;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
 }
 
