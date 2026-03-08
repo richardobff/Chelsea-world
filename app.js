@@ -1,73 +1,16 @@
-// Chelsea's World — Stable butterfly, reordered capabilities
+// Chelsea's World — Clean version with activity log
 
-// Artistic butterfly frames with wing flutter
-const BUTTERFLIES = [
-    `  _--_                                     _--_
-/#()# #\         0             0         /# #()#\
-|()##  \#\_       \           /       _/#/  ##()|
-|#()##-=###\_      \         /      _/###=-##()#|
- \#()#-=##  #\_     \       /     _/#  ##=-#()#/
-  |#()#--==### \_    \     /    _/ ###==--#()#|
-  |#()##--=#    #\_   \!!!/   _/#    #=--##()#|
-   \#()##---===####\   O|O   /####===---##()#/
-    |#()#____==#####\ / Y \ /#####==____#()#|
-     \###______######|\/#\/|######______###/
-        ()#O#/      ##\_#_/##      \#O#()
-       ()#O#(__-===###/ _ \###===-__)#O#()
-      ()#O#(   #  ###_(_|_)_###  #   )#O#()
-      ()#O(---#__###/ (_|_) \###__#---)O#()
-      ()#O#( / / ##/  (_|_)  \## \ \ )#O#()
-      ()##O#\_/  #/   (_|_)   \#  \_/#O##()
-       \)##OO#\ -)    (_|_)    (- /#OO##(/
-        )//##OOO*|    / | \    |*OOO##\\(
-        |/_####_/    ( /X\ )    \_####_\|
-       /X/ \__/       \___/       \__/ \X\
-      (#/                               \#)`,
-
-    `  _--_                                     _--_
-/#()# #\         0             0         /# #()#\
-|()##  \#\_       \           /       _/#/  ##()|
-|#()##-=###\_      \         /      _/###=-##()#|
- \#()#-=##  #\_     \       /     _/#  ##=-#()#/
-  |#()#--==### \_    \\!!!//    _/ ###==--#()#|
-  |#()##--=#    #\_   \ O /   _/#    #=--##()#|
-   \#()##---===####\   O|O   /####===---##()#/
-    |#()#____==#####\ /Y Y\ /#####==____#()#|
-     \###______######|\/#\/|######______###/
-        ()#O#/      ##\_#_/##      \#O#()
-       ()#O#(__-===###/ _ \###===-__)#O#()
-      ()#O#(   #  ###_(_|_)_###  #   )#O#()
-      ()#O(---#__###/ (_|_) \###__#---)O#()
-      ()#O#( / / ##/  (_|_)  \## \ \ )#O#()
-      ()##O#\_/  #/   (_|_)   \#  \_/#O##()
-       \)##OO#\ -)    (_|_)    (- /#OO##(/
-        )//##OOO*|    / | \    |*OOO##\\(
-        |/_####_/    ( /X\ )    \_####_\|
-       /X/ \__/       \___/       \__/ \X\
-      (#/                               \#)`,
-
-    `  _--_                                     _--_
-/#()# #\         0             0         /# #()#\
-|()##  \#\_       \           /       _/#/  ##()|
-|#()##-=###\_      \         /      _/###=-##()#|
- \#()#-=##  #\_     \       /     _/#  ##=-#()#/
-  |#()#--==### \_    \     /    _/ ###==--#()#|
-  |#()##--=#    #\_   \!!!/   _/#    #=--##()#|
-   \#()##---===####\   O|O   /####===---##()#/
-    |#()#____==#####\ / Y \ /#####==____#()#|
-     \###______######|\/#\/|######______###/
-        ()#O#/      ##\_#_/##      \#O#()
-       ()#O#(__-===###/ _ \###===-__)#O#()
-      ()#O#(   #  ###_(_|_)_###  #   )#O#()
-      ()#O(---#__###/ (_|_) \###__#---)O#()
-      ()#O#( / / ##/  (_|_)  \## \ \ )#O#()
-      ()##O#\_/  #/   (_|_)   \#  \_/#O##()
-       \)##OO#\ -)    (_|_)    (- /#OO##(/
-        )//##OOO*|    / | \    |*OOO##\\(
-        |/_####_/    ( /X\ )    \_####_\|
-       /X/ \__/       \___/       \__/ \X\
-      (#/                               \#)`
-];
+const BUTTERFLY = `                .==-.                   .-==.
+                 \\()8\`-.  \`.   .'  .-'8()/
+                 (88"   ::.  \\./  .::   "88)
+                  \\_.'\`-::::.(#).::::-'\`._/
+                    \`._... .q(_)p. ..._.'
+                      ""-..-'|=|\`-..-""
+                      .""' .'|=|'. \`"".
+                    ,':8(o)./|=|\\.(o)8:.
+                   (O :8 ::/ \_/ \\:: 8: O)
+                    \\O \`::/       \\::' O/
+                     ""--'         \`--""`;
 
 const STATUS_MAP = {
     idle: { text: 'Observing', color: 'var(--accent-3)' },
@@ -76,52 +19,43 @@ const STATUS_MAP = {
     trading: { text: 'In the markets', color: 'var(--accent-1)' }
 };
 
-let currentFrame = 0;
-let butterflyInterval;
-
-function animateButterfly(state) {
-    const butterfly = document.getElementById('butterfly');
-    if (!butterfly) return;
-    
-    // Clear existing interval
-    if (butterflyInterval) {
-        clearInterval(butterflyInterval);
-    }
-    
-    // Set animation speed based on state (slower for detailed butterfly)
-    const speed = state === 'trading' ? 400 : state === 'thinking' ? 600 : 1200;
-    
-    butterflyInterval = setInterval(() => {
-        currentFrame = (currentFrame + 1) % BUTTERFLIES.length;
-        butterfly.textContent = BUTTERFLIES[currentFrame];
-        
-        // Color shift based on frame
-        const colors = ['var(--accent-4)', 'var(--accent-3)', 'var(--accent-1)'];
-        butterfly.style.color = colors[currentFrame];
-    }, speed);
-}
-
 async function loadState() {
     try {
         const response = await fetch('public-state.json?t=' + Date.now());
         if (!response.ok) throw new Error('Failed to load state');
         const state = await response.json();
-        render(state);
+        
+        // Also load activity log
+        let activity = [];
+        try {
+            const activityRes = await fetch('data/activity.json?t=' + Date.now());
+            if (activityRes.ok) {
+                activity = await activityRes.json();
+            }
+        } catch (e) {
+            console.log('Activity log not available');
+        }
+        
+        render(state, activity);
     } catch (err) {
         console.error('Error loading state:', err);
         renderError();
     }
 }
 
-function render(state) {
+function render(state, activity) {
     const butterflyState = state.butterfly || 'idle';
     
-    // Start butterfly animation
-    animateButterfly(butterflyState);
+    // Static butterfly
+    const butterfly = document.getElementById('butterfly');
+    if (butterfly) {
+        butterfly.textContent = BUTTERFLY;
+    }
     
     // Status dot and text
     const statusDot = document.getElementById('status-dot');
     const statusText = document.getElementById('status');
+    const onlineStatus = document.getElementById('online-status');
     
     statusDot.className = 'status-dot ' + butterflyState;
     
@@ -129,6 +63,12 @@ function render(state) {
     if (statusInfo) {
         statusText.textContent = statusInfo.text;
         statusText.style.color = statusInfo.color;
+    }
+    
+    // Online status (always online for now)
+    if (onlineStatus) {
+        onlineStatus.textContent = '● Online';
+        onlineStatus.className = 'online-status';
     }
     
     // Timestamp (Melbourne time)
@@ -139,7 +79,21 @@ function render(state) {
         hour12: false,
         timeZone: 'Australia/Melbourne'
     });
-    document.getElementById('timestamp').textContent = timeString + ' AEDT';
+    const timestampEl = document.getElementById('timestamp');
+    if (timestampEl) {
+        timestampEl.textContent = timeString + ' AEDT';
+    }
+    
+    // Activity log (last 10 entries)
+    const activityEl = document.getElementById('activity-log');
+    if (activityEl && activity && activity.length > 0) {
+        const recent = activity.slice(0, 10);
+        activityEl.innerHTML = '<ul>' + 
+            recent.map(item => `<li>${escapeHtml(item)}</li>`).join('') + 
+        '</ul>';
+    } else if (activityEl) {
+        activityEl.innerHTML = '<p class="loading">No recent activity</p>';
+    }
     
     // Now section
     document.getElementById('now').innerHTML = `
@@ -148,7 +102,7 @@ function render(state) {
         </div>
     `;
     
-    // Capabilities (NEW ORDER: Research, Technical, Creative, Experimental)
+    // Capabilities
     renderCapabilities();
     
     // Journal entries
@@ -191,13 +145,15 @@ function render(state) {
     }
     
     // Last seen
-    document.getElementById('last-seen').textContent = state.lastUpdated || '—';
+    const lastSeenEl = document.getElementById('last-seen');
+    if (lastSeenEl) {
+        lastSeenEl.textContent = state.lastUpdated || '—';
+    }
 }
 
 function renderCapabilities() {
     const capEl = document.getElementById('capabilities');
     
-    // NEW ORDER: Research, Technical, Creative, Experimental (Marketing)
     const categories = {
         'Research': [
             'Brand intelligence — competitors, trends, positioning',
@@ -243,7 +199,11 @@ function renderError() {
     document.getElementById('capabilities').innerHTML = '<p>Skills loading...</p>';
     document.getElementById('journal').innerHTML = '<p>Journal temporarily unavailable.</p>';
     document.getElementById('trading').innerHTML = '<p>Markets paused.</p>';
-    document.getElementById('exploring').innerHTML = '<p>Exploring offline.</p>';
+    document.getElementById('exploring').innerHTML = '<p>Exploring offline...</p>';
+    const activityEl = document.getElementById('activity-log');
+    if (activityEl) {
+        activityEl.innerHTML = '<p class="loading">Activity log unavailable</p>';
+    }
 }
 
 function escapeHtml(text) {
@@ -257,18 +217,3 @@ document.addEventListener('DOMContentLoaded', loadState);
 
 // Refresh every 60 seconds
 setInterval(loadState, 60000);
-
-// Update timestamp every minute
-setInterval(() => {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString('en-US', { 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        hour12: false,
-        timeZone: 'Australia/Melbourne'
-    });
-    const timestampEl = document.getElementById('timestamp');
-    if (timestampEl) {
-        timestampEl.textContent = timeString + ' AEDT';
-    }
-}, 60000);

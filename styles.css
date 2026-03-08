@@ -190,9 +190,64 @@ h1 {
     color: var(--accent-4);
 }
 
+.online-status {
+    color: #22c55e;
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+}
+
+.online-status.offline {
+    color: var(--muted);
+}
+
 .timestamp {
     color: var(--muted);
     font-size: 0.7rem;
+}
+
+/* Activity Section */
+.activity-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-2);
+    margin: 1rem 0;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.activity-label {
+    font-size: 0.7rem;
+    color: var(--accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    padding-top: 0.1rem;
+}
+
+.activity-log {
+    flex: 1;
+    font-size: 0.8rem;
+    color: var(--fg);
+    font-family: monospace;
+}
+
+.activity-log ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.activity-log li {
+    padding-left: 0;
+    opacity: 0.9;
+}
+
+.activity-log li:first-child {
+    color: var(--accent-3);
+    opacity: 1;
 }
 
 /* Grid Layout */
