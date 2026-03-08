@@ -1,24 +1,27 @@
 // Chelsea's World — Stable butterfly, reordered capabilities
 
-// Simple, stable butterfly frames (same width to prevent layout shift)
+// Detailed butterfly frames with wing animation
 const BUTTERFLIES = [
-    `    \\   /
-     \\ /
-    ( ~ )
-     / \\
-    /   \\`,
+    `      .==-. .-==.
+     /\\()8\`-._' 
+    (88" ::.  \\./
+     \\_.'\`-:::(#)
+       ". _..q(_)p
+        ""-..-'|=|`,
     
-    `    |   |
-     \\ /
-    ( ~ )
-     / \\
-    |   |`,
+    `      .===. .===.
+     (8\\)   \`._'
+     (88" ::  | |
+      \\_.'-::|#|
+        '._.(#)#(.
+        -..'|=|=|`,
     
-    `    /   \\
-     \\ /
-    ( ~ )
-     / \\
-    \\   /`
+    `      .==-. .-==.
+     /\\()8\`-._' 
+    (88" ::.  \\./
+     \\_.'\`-:::(#)
+       ". _..q(_)p
+        ""-..-'|=|`
 ];
 
 const STATUS_MAP = {
