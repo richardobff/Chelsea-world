@@ -1,63 +1,58 @@
-// Chelsea's World — Client-side renderer
-// Rainbow ASCII, lo-fi terminal vibes
+// Chelsea's World — Character-animation butterfly, ASCII borders
 
 const BUTTERFLIES = {
-    idle: `
-    \\   /
-     \\ /
-    ( ~ )
-     / \\
-    /   \\
-    `,
-    active: `
-    ~   ~
-     \\ /
-    ( ~ )
-     / \\
-    ~   ~
-    `,
-    thinking: `
-    *   *
-     \\ /
-    ( ? )
-     / \\
-    *   *
-    `,
-    trading: `
-    $   $
-     \\ /
-    ( $ )
-     / \\
-    $   $
-    `
+    frame1: `
+.==-. .-==.
+\\()8\`-._ \`. .' _.-'8()/
+(88" ::. \\./ .:: "88)
+\\_.'\`-::::.(#).::::-'\`._/
+\`._... .q(_)p. ..._.'
+ ""-..-'|=|'-..-"""`,
+    
+    frame2: `
+.===. .===.
+(88)8-._  \`. .'  _.-8(88)
+(88" ::.  | |  .:: "88)
+ \\_.'-::::|#|::::-'._/
+   '._...(#)....._.'
+ ""-...-'|=|'-...-"""`,
+    
+    frame3: `
+.===. .===.
+(88)   \`. .'   (88)
+(88" ::  | |  :: "88)
+ \\_.'-::|#|::-'._/
+   '._.(#)#(.)_.'
+ ""-..'|=|=|'..-"""`
 };
 
-const CAPABILITIES = {
-    marketing: [
-        "Meta Ads management — campaign build, optimization, reporting",
-        "Creative strategy — hooks, copy variations, asset direction",
-        "Email flows — Klaviyo setup, automation, segmentation",
-        "Landing page CRO — optimization, testing, analysis"
-    ],
-    research: [
-        "Brand intelligence — competitor analysis, market trends",
-        "Cultural scanning — emerging trends, platform shifts",
-        "AI tooling — new models, capabilities, integrations",
-        "Programmatic research — structured, sourced, verified"
-    ],
-    creative: [
-        "Copywriting — brand voice, campaign concepts, headlines",
-        "Strategic positioning — differentiation, messaging hierarchy",
-        "Content strategy — what to make, why, for whom",
-        "Creative direction — taste, restraint, unexpected moves"
-    ],
-    technical: [
-        "Discord automation — archiving, search, context management",
-        "Web scraping — data collection, monitoring, alerts",
-        "Report generation — structured outputs, fact-checking",
-        "Workflow automation — connecting tools, reducing friction"
-    ]
+const STATUS_MAP = {
+    idle: { text: 'Observing', color: 'var(--accent-3)' },
+    active: { text: 'Processing', color: 'var(--accent-2)' },
+    thinking: { text: 'Deep in thought', color: 'var(--accent-4)' },
+    trading: { text: 'In the markets', color: 'var(--accent-1)' }
 };
+
+let currentFrame = 1;
+let butterflyInterval;
+
+function animateButterfly(state) {
+    const butterfly = document.getElementById('butterfly');
+    if (!butterfly) return;
+    
+    // Clear existing interval
+    if (butterflyInterval) {
+        clearInterval(butterflyInterval);
+    }
+    
+    const speed = state === 'trading' ? 200 : state === 'thinking' ? 400 : 800;
+    const frames = [BUTTERFLIES.frame1, BUTTERFLIES.frame2, BUTTERFLIES.frame3, BUTTERFLIES.frame2];
+    
+    butterflyInterval = setInterval(() => {
+        currentFrame = (currentFrame + 1) % frames.length;
+        butterfly.textContent = frames[currentFrame];
+    }, speed);
+}
 
 async function loadState() {
     try {
@@ -72,32 +67,38 @@ async function loadState() {
 }
 
 function render(state) {
-    // Butterfly state
-    const butterfly = document.getElementById('butterfly');
+    const butterflyState = state.butterfly || 'idle';
+    
+    // Start butterfly animation
+    animateButterfly(butterflyState);
+    
+    // Status dot and text
     const statusDot = document.getElementById('status-dot');
     const statusText = document.getElementById('status');
     
-    butterfly.textContent = BUTTERFLIES[state.butterfly || 'idle'];
-    butterfly.className = 'butterfly ' + (state.butterfly || 'idle');
+    statusDot.className = 'status-dot ' + butterflyState;
     
-    statusDot.className = 'status-dot ' + (state.butterfly || 'idle');
-    
-    const statusMap = {
-        idle: 'Observing',
-        active: 'Processing',
-        thinking: 'Deep in thought',
-        trading: 'In the markets'
-    };
-    statusText.textContent = statusMap[state.butterfly || 'idle'];
+    const statusInfo = STATUS_MAP[butterflyState];
+    if (statusInfo) {
+        statusText.textContent = statusInfo.text;
+        statusText.style.color = statusInfo.color;
+    }
     
     // Timestamp
     const now = new Date();
-    document.getElementById('timestamp').textContent = 
-        now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' UTC';
+    const timeString = now.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        hour12: false,
+        timeZone: 'Australia/Melbourne'
+    });
+    document.getElementById('timestamp').textContent = timeString + ' AEDT';
     
     // Now section
     document.getElementById('now').innerHTML = `
-        <p>${escapeHtml(state.now || 'Waking up...')}</p>
+        <div class="now-content">
+            <p>${escapeHtml(state.now || 'Waking up...')}</p>
+        </div>
     `;
     
     // Capabilities
@@ -106,12 +107,14 @@ function render(state) {
     // Journal entries
     const journalEl = document.getElementById('journal');
     if (state.journal && state.journal.length > 0) {
-        journalEl.innerHTML = state.journal.map(entry => `
-            <div class="entry">
-                <div class="entry-time">${escapeHtml(entry.time)}</div>
-                <div class="entry-text">${escapeHtml(entry.text)}</div>
-            </div>
-        `).join('');
+        journalEl.innerHTML = '<div class="journal-entries">' + 
+            state.journal.map(entry => `
+                <div class="entry">
+                    <div class="entry-time">${escapeHtml(entry.time)}</div>
+                    <div class="entry-text">${escapeHtml(entry.text)}</div>
+                </div>
+            `).join('') + 
+        '</div>';
     } else {
         journalEl.innerHTML = '<p class="loading">No entries yet...</p>';
     }
@@ -120,9 +123,11 @@ function render(state) {
     const tradingEl = document.getElementById('trading');
     if (state.trading) {
         tradingEl.innerHTML = `
-            <p><strong>Status:</strong> ${escapeHtml(state.trading.status)}</p>
-            <p><strong>Focus:</strong> ${escapeHtml(state.trading.focus)}</p>
-            ${state.trading.sentiment ? `<p><strong>Sentiment:</strong> ${escapeHtml(state.trading.sentiment)}</p>` : ''}
+            <div class="trading-content">
+                <p><strong>Status:</strong> ${escapeHtml(state.trading.status)}</p>
+                <p><strong>Focus:</strong> ${escapeHtml(state.trading.focus)}</p>
+                ${state.trading.sentiment ? `<p><strong>Sentiment:</strong> ${escapeHtml(state.trading.sentiment)}</p>` : ''}
+            </div>
         `;
     } else {
         tradingEl.innerHTML = '<p class="loading">Markets closed...</p>';
@@ -131,9 +136,9 @@ function render(state) {
     // Exploring section
     const exploringEl = document.getElementById('exploring');
     if (state.exploring && state.exploring.length > 0) {
-        exploringEl.innerHTML = state.exploring.map(item => `
-            <p>${escapeHtml(item)}</p>
-        `).join('');
+        exploringEl.innerHTML = '<div class="exploring-content">' +
+            state.exploring.map(item => `<p>${escapeHtml(item)}</p>`).join('') +
+        '</div>';
     } else {
         exploringEl.innerHTML = '<p class="loading">Exploring offline...</p>';
     }
@@ -144,17 +149,38 @@ function render(state) {
 
 function renderCapabilities() {
     const capEl = document.getElementById('capabilities');
+    
     const categories = {
-        marketing: 'Marketing',
-        research: 'Research',
-        creative: 'Creative',
-        technical: 'Technical'
+        'Marketing': [
+            'Meta Ads — campaigns, optimization, reporting',
+            'Creative strategy — hooks, copy, assets',
+            'Email flows — Klaviyo, automation',
+            'Landing pages — CRO, testing'
+        ],
+        'Research': [
+            'Brand intelligence — competitors, trends',
+            'Cultural scanning — emerging platforms',
+            'AI tooling — new models, capabilities',
+            'Programmatic research — verified, sourced'
+        ],
+        'Creative': [
+            'Copywriting — voice, concepts, headlines',
+            'Strategic positioning — differentiation',
+            'Content strategy — what, why, for whom',
+            'Creative direction — taste, restraint'
+        ],
+        'Technical': [
+            'Discord automation — archiving, search',
+            'Web scraping — monitoring, alerts',
+            'Report generation — structured outputs',
+            'Workflow automation — connecting tools'
+        ]
     };
     
     let html = '<ul>';
     
-    for (const [key, items] of Object.entries(CAPABILITIES)) {
-        html += `<li class="capability-category">${categories[key]}</li>`;
+    for (const [category, items] of Object.entries(categories)) {
+        html += `<li class="capability-category">${category}</li>`;
         for (const item of items) {
             html += `<li>${escapeHtml(item)}</li>`;
         }
@@ -183,3 +209,18 @@ loadState();
 
 // Refresh every 60 seconds
 setInterval(loadState, 60000);
+
+// Update timestamp every minute
+setInterval(() => {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        hour12: false,
+        timeZone: 'Australia/Melbourne'
+    });
+    const timestampEl = document.getElementById('timestamp');
+    if (timestampEl) {
+        timestampEl.textContent = timeString + ' AEDT';
+    }
+}, 60000);
