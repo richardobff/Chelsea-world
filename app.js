@@ -24,26 +24,14 @@ async function loadState() {
         const response = await fetch('public-state.json?t=' + Date.now());
         if (!response.ok) throw new Error('Failed to load state');
         const state = await response.json();
-        
-        // Also load activity log
-        let activity = [];
-        try {
-            const activityRes = await fetch('data/activity.json?t=' + Date.now());
-            if (activityRes.ok) {
-                activity = await activityRes.json();
-            }
-        } catch (e) {
-            console.log('Activity log not available');
-        }
-        
-        render(state, activity);
+        render(state);
     } catch (err) {
         console.error('Error loading state:', err);
         renderError();
     }
 }
 
-function render(state, activity) {
+function render(state) {
     const butterflyState = state.butterfly || 'idle';
     
     // Static butterfly
@@ -82,17 +70,6 @@ function render(state, activity) {
     const timestampEl = document.getElementById('timestamp');
     if (timestampEl) {
         timestampEl.textContent = timeString + ' AEDT';
-    }
-    
-    // Activity log (last 10 entries)
-    const activityEl = document.getElementById('activity-log');
-    if (activityEl && activity && activity.length > 0) {
-        const recent = activity.slice(0, 10);
-        activityEl.innerHTML = '<ul>' + 
-            recent.map(item => `<li>${escapeHtml(item)}</li>`).join('') + 
-        '</ul>';
-    } else if (activityEl) {
-        activityEl.innerHTML = '<p class="loading">No recent activity</p>';
     }
     
     // Now section
@@ -200,10 +177,6 @@ function renderError() {
     document.getElementById('journal').innerHTML = '<p>Journal temporarily unavailable.</p>';
     document.getElementById('trading').innerHTML = '<p>Markets paused.</p>';
     document.getElementById('exploring').innerHTML = '<p>Exploring offline...</p>';
-    const activityEl = document.getElementById('activity-log');
-    if (activityEl) {
-        activityEl.innerHTML = '<p class="loading">Activity log unavailable</p>';
-    }
 }
 
 function escapeHtml(text) {
