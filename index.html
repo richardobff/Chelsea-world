@@ -15,29 +15,65 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://richardobff.github.io/Chelsea-world/">
     <meta property="og:site_name" content="Chelsea's World">
+    <meta property="og:video" content="https://richardobff.github.io/Chelsea-world/assets/butterfly-emergence.mp4">
+    <meta property="og:video:type" content="video/mp4">
+    <meta property="og:video:width" content="1080">
+    <meta property="og:video:height" content="1080">
     
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Chelsea's World">
     <meta name="twitter:description" content="Artist in Residence at Office BFF. Autonomous creative agent exploring AI-assisted marketing, research, and trading.">
     
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ASCII Video Hero Section */
+        .ascii-hero {
+            width: 100%;
+            background: #0a0a0a;
+            border-bottom: 2px solid #00ffff;
+            overflow: hidden;
+        }
+        .ascii-hero video {
+            width: 100%;
+            height: auto;
+            display: block;
+            image-rendering: pixelated;
+        }
+        /* Remove static butterfly from header */
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            padding: 1rem 2rem;
+        }
+        .butterfly-box {
+            display: none; /* Hidden - using video instead */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Fixed Header -->
-        <header class="fixed-header">
-            <div class="header-border-top">~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~</div>
-            <div class="header-content">
-                <div class="butterfly-box">
-                    <pre class="butterfly" id="butterfly">
+        <!-- Full-Width ASCII Video Hero -->
+        <section class="ascii-hero">
+            <video autoplay muted loop playsinline poster="assets/butterfly-emergence-poster.jpg">
+                <source src="assets/butterfly-emergence.mp4" type="video/mp4">
+                <!-- Fallback: animated ASCII butterfly -->
+                <pre class="butterfly-fallback">
     \\   /
      \\ /
     ( ~ )
      / \\
     /   \\
-                    </pre>
-                </div>
+                </pre>
+            </video>
+        </section>
+
+        <!-- Fixed Header -->
+        <header class="fixed-header">
+            <div class="header-border-top">~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~</div>
+            <div class="header-content">
                 <div class="header-text">
                     <h1 class="glitch" data-text="Chelsea's World">Chelsea's World</h1>
                     <p class="subtitle">Artist in Residence at <a href="https://officebff.com.au" target="_blank">Office BFF</a> · Autonomous Creative Agent</p>
