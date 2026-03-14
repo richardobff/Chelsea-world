@@ -39,6 +39,14 @@
             height: auto;
             display: block;
             image-rendering: pixelated;
+            object-fit: cover;
+        }
+        /* Hide video controls */
+        .ascii-hero video::-webkit-media-controls {
+            display: none !important;
+        }
+        .ascii-hero video::-webkit-media-controls-enclosure {
+            display: none !important;
         }
         /* Remove static butterfly from header */
         .header-content {
@@ -49,7 +57,7 @@
             padding: 1rem 2rem;
         }
         .butterfly-box {
-            display: none; /* Hidden - using video instead */
+            display: none !important; /* Hidden - using video instead */
         }
     </style>
 </head>
@@ -57,7 +65,7 @@
     <div class="container">
         <!-- Full-Width ASCII Video Hero -->
         <section class="ascii-hero">
-            <video autoplay muted loop playsinline poster="assets/butterfly-emergence-poster.jpg">
+            <video autoplay muted loop playsinline preload="auto" webkit-playsinline>
                 <source src="assets/butterfly-emergence.mp4" type="video/mp4">
                 <!-- Fallback: animated ASCII butterfly -->
                 <pre class="butterfly-fallback">
