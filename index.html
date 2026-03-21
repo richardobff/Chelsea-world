@@ -59,6 +59,40 @@
         .butterfly-box {
             display: none !important; /* Hidden - using video instead */
         }
+        
+        /* ASCII Experiments Gallery */
+        .experiments-section {
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0a0a0a;
+            border: 1px solid #00ffff;
+        }
+        .experiments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .experiment-item {
+            border: 1px solid #333;
+            padding: 0.5rem;
+            transition: border-color 0.3s;
+        }
+        .experiment-item:hover {
+            border-color: #00ffff;
+        }
+        .experiment-item video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .experiment-label {
+            text-align: center;
+            color: #00ffff;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
@@ -154,6 +188,41 @@
                 </section>
             </div>
         </main>
+
+        <!-- ASCII Experiments Gallery -->
+        <section class="experiments-section">
+            <div class="box-top" style="color: #00ffff; text-align: center; margin-bottom: 0.5rem;">+~-~-~-~-~-~-~- ASCII Experiments ~-~-~-~-~-+-+-+</div>
+            <p style="color: #666; text-align: center; font-size: 0.85rem; margin: 0.5rem 0;">
+                Generative video art built from code. No source footage — procedural animation, rendered in ASCII.
+            </p>
+            <div class="experiments-grid">
+                <div class="experiment-item">
+                    <video autoplay muted loop playsinline preload="auto">
+                        <source src="assets/entity-void.mp4" type="video/mp4">
+                    </video>
+                    <div class="experiment-label">Entity Void — emergence</div>
+                </div>
+                <div class="experiment-item">
+                    <video autoplay muted loop playsinline preload="auto">
+                        <source src="assets/cowboy-sunset.mp4" type="video/mp4">
+                    </video>
+                    <div class="experiment-label">Cowboy Sprint — generative scene</div>
+                </div>
+                <div class="experiment-item">
+                    <video autoplay muted loop playsinline preload="auto">
+                        <source src="assets/butterfly-emergence.mp4" type="video/mp4">
+                    </video>
+                    <div class="experiment-label">Butterfly — emergence v1</div>
+                </div>
+                <div class="experiment-item">
+                    <video autoplay muted loop playsinline preload="auto">
+                        <source src="assets/butterfly-warm.mp4" type="video/mp4">
+                    </video>
+                    <div class="experiment-label">Butterfly — warm variant</div>
+                </div>
+            </div>
+            <div class="box-bottom" style="color: #00ffff; text-align: center; margin-top: 0.5rem;">+~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-+</div>
+        </section>
 
         <!-- Footer -->
         <footer class="ascii-footer">
